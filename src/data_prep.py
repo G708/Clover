@@ -2,7 +2,7 @@
 # gene2pubmed is downloaded from NCBI.
 # rna_tissue_gtex.tsv is downloaded from Human Protein Atlas.
 # DE_Prior.txt is downloaded from https://raw.githubusercontent.com/maggiecrow/DEprior/master/DE_Prior.txt.
-# essentiality_score.txt is downloaded from https://v3.ogee.info/static/files/tissueSpecific.txt.gz
+# tissueSpecific.txt is downloaded from https://v3.ogee.info/static/files/tissueSpecific.txt.gz
 
 # Usage:
 # python3 data_prep.py -t 4 -b /path/to/base/folder
@@ -32,6 +32,10 @@ import essentiality
 
 logger = logging.getLogger(__name__)
 
+logging.basicConfig(level=logging.INFO,
+format="%(asctime)s - %(levelname)s:%(name)s - %(message)s",
+filename="test.log")
+
 base_folder_default = "data"
 
 class ResourceManager(object):
@@ -41,7 +45,8 @@ class ResourceManager(object):
 	Components (files) in reference folder is as below:
 
 		base_folder
-		└── data
+		├── DEPrior_gini_g2p.txt
+		└── resource
 			├── DE_Prior.txt
 			├── gene2pubmed
 			├── gene2pubmed.gz
@@ -49,7 +54,8 @@ class ResourceManager(object):
 			├── rna_tissue_gtex_gini_norm.tsv
 			├── rna_tissue_gtex.tsv
 			├── rna_tissue_gtex.tsv.zip
-			├── essentiality_score.txt
+			├── tissueSpecific_mean.tsv
+			├── tissueSpecific.txt
 			└── tissueSpecific.txt.gz
 
 	Attributes:
@@ -92,10 +98,10 @@ class ResourceManager(object):
 		return fname
 
 	def get_essentiality(self):
-		fname = os.path.join(self.resource_folder, 'essentiality_score.txt')
+		fname = os.path.join(self.resource_folder, 'tissueSpecific.txt')
 		if not os.path.exists(fname):
 			url = 'https://v3.ogee.info/static/files/tissueSpecific.txt.gz'
-			download_url(url, fname)
+			download_gzip(url, fname)
 		else:
 			logger.warning(fname + ' already exists. Skip Download.')
 		return fname
@@ -108,7 +114,7 @@ class ResourceManager(object):
 
 		gini_preprocess = os.path.join(self.resource_folder, 'rna_tissue_gtex_gini_norm.tsv')
 		g2p_preprocess = os.path.join(self.resource_folder, 'gene2pubmed_human_count.txt')
-		essentiality_preprocess = os.path.join(self.resource_folder, 'essentiality_score.txt')
+		essentiality_preprocess = os.path.join(self.resource_folder, 'tissueSpecific_mean.tsv')
 
 		if not os.path.exists(g2p_preprocess):
 			g2p_prepare.main(g2p_file)
@@ -125,19 +131,19 @@ class ResourceManager(object):
 		else:
 			logger.warning(essentiality_preprocess + ' already exists. Skip preprocess.')
 
-		if not os.path.exists(f"{self.resource_folder}/DEPrior_gini_g2p.txt"):
+		if not os.path.exists(f"{self.base_folder}/DEPrior_gini_g2p.txt"):
 			self.marge_all()
 		else:
-			logger.warning(f"{self.resource_folder}/DEPrior_gini_g2p.txt" + ' already exists. Skip preprocess.')
+			logger.warning(f"{self.base_folder}/DEPrior_gini_g2p.txt" + ' already exists. Skip preprocess.')
 		return 
 
 	def marge_all(self):
 		"""Loading resourses and merge to df.
 		"""
-		g2p = pd.read_csv(f"{self.resource_folder}/gene2pubmed_human_count.txt", sep="\t")
+		g2p = pd.read_csv(f"{self.resource_folder}/gene2pubmed_human_count.txt", sep="\t", low_memory=False)
 		gini = pd.read_csv(f"{self.resource_folder}/rna_tissue_gtex_gini_norm.tsv", sep="\t")
 		DEPrior = pd.read_csv(f"{self.resource_folder}/DE_Prior.txt", sep="\t")
-		essentiality = pd.read_csv(f"{self.resource_folder}/essentiality_score.txt", sep="\t")
+		essentiality = pd.read_csv(f"{self.resource_folder}/tissueSpecific_mean.tsv", sep="\t")
 
 		DEPrior_g2p = pd.merge(g2p[["entrezgene_id","hgnc_symbol", "ensembl_gene_id","N"]], DEPrior[["Gene_Name", "Gene_EntrezID", "DE_Prior_Rank"]], 
 			  left_on="entrezgene_id", right_on="Gene_EntrezID", how="outer")
@@ -161,11 +167,12 @@ class ResourceManager(object):
 		# set data type
 		# DEPrior_g2p = DEPrior_g2p.astype({'entrezgene_id': str})
 		DEPrior_g2p.to_csv(
-			f"{self.resource_folder}/DEPrior_gini_g2p.txt", sep="\t",index=False,
+			f"{self.base_folder}/DEPrior_gini_g2p.txt", sep="\t",index=False,
 			columns = [
 				'hgnc_symbol', 'entrezgene_id', 'ensembl_gene_id',
 				'DE_Prior_Rank', 'N', 'g2p_rank',
-				'gini', 'gini_norm', 'gini_norm_rank'
+				'gini', 'gini_norm', 'gini_norm_rank',
+				'ess_percent'
 			]
 		)
 		
@@ -206,7 +213,7 @@ def download_zip(url, fname):
 		zfile = fname + ".zip"
 		urllib.request.urlretrieve(url, zfile)
 		with ZipFile(zfile, "r") as f:
-			f.extractall()
+			f.extractall(path=os.path.dirname(fname))
 	except Exception as e:
 		logger.error('Download ERROR: %s' % (e))
 
