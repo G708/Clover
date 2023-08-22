@@ -10,3 +10,4 @@ dash_html_components
 wordcloud
 dash_cytoscape
 ranx
+biomart

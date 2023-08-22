@@ -1,22 +1,33 @@
 # Clover-vis
-
 `Clover` tool to mining differentially expressed genes (DEGs) in intaractive visualization tool.
-
 This tool helps to summarise gene feature of your intrust.
-
-
-## Dependencies
-
-python 3
-
-- numpy
-- pandas
-- pathlib
-- biomart
-- WordCloud
 
 ## Installation
 
+To run this app locally, clone this repository and open this app folder in your terminal/Command Prompt.
+```bash
+git clone https://github.com/G708/Clover.git
+cd Clover
+```
+
+The project relies on several Python packages including Dash, Dash Bootstrap Components, Plotly, and Pandas.
+You can install these dependencies like this:
+```bash
+pip install -r requirements.txt
+```
+
+Download the data with:
+```bash
+python src/data_prep.py
+```
+
+
+Run this app locally with:
+```bash
+python app.py
+```
+
+Open a browser at http://127.0.0.1:8050
 
 ## Quick usase
 
