@@ -1,0 +1,10 @@
+version: "3"
+services: 
+  dev:
+    build: .
+    tty: true
+    ports:
+      - "8890:8890"
+    working_dir: /opt
+    volumes: 
+      - ./Dash_demo:/opt

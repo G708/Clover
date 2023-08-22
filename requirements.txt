@@ -1,0 +1,12 @@
+dash
+dash-uploader
+dash_bootstrap_components
+Flask
+pandas
+plotly
+scikit-learn
+dash_core_components
+dash_html_components
+wordcloud
+dash_cytoscape
+ranx
