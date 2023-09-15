@@ -28,7 +28,6 @@ from sklearn.preprocessing import QuantileTransformer
 
 import gini_prepare
 import g2p_prepare
-import essentiality
 
 logger = logging.getLogger(__name__)
 
@@ -53,10 +52,7 @@ class ResourceManager(object):
 			├── gene2pubmed_human_count.txt
 			├── rna_tissue_gtex_gini_norm.tsv
 			├── rna_tissue_gtex.tsv
-			├── rna_tissue_gtex.tsv.zip
-			├── tissueSpecific_mean.tsv
-			├── tissueSpecific.txt
-			└── tissueSpecific.txt.gz
+			└──  rna_tissue_gtex.tsv.zip
 
 	Attributes:
 		thread: A thread number to run gini_prepare.main() parallel.
@@ -97,24 +93,14 @@ class ResourceManager(object):
 			logger.warning(fname + ' already exists. Skip Download.')
 		return fname
 
-	def get_essentiality(self):
-		fname = os.path.join(self.resource_folder, 'tissueSpecific.txt')
-		if not os.path.exists(fname):
-			url = 'https://v3.ogee.info/static/files/tissueSpecific.txt.gz'
-			download_gzip(url, fname)
-		else:
-			logger.warning(fname + ' already exists. Skip Download.')
-		return fname
 
 	def download_all(self):
 		g2p_file = self.get_g2p()
 		gtex_HPA_file = self.get_gtex_HPA()
 		de_prior_file = self.get_DE_Prior()
-		essentiality_score_file = self.get_essentiality()
 
 		gini_preprocess = os.path.join(self.resource_folder, 'rna_tissue_gtex_gini_norm.tsv')
 		g2p_preprocess = os.path.join(self.resource_folder, 'gene2pubmed_human_count.txt')
-		essentiality_preprocess = os.path.join(self.resource_folder, 'tissueSpecific_mean.tsv')
 
 		if not os.path.exists(g2p_preprocess):
 			g2p_prepare.main(g2p_file)
@@ -125,11 +111,6 @@ class ResourceManager(object):
 			gini_prepare.main(gtex_HPA_file, self.thread)
 		else:
 			logger.warning(gini_preprocess + ' already exists. Skip preprocess.')
-
-		if not os.path.exists(essentiality_preprocess):
-			essentiality.main(essentiality_score_file)
-		else:
-			logger.warning(essentiality_preprocess + ' already exists. Skip preprocess.')
 
 		if not os.path.exists(f"{self.base_folder}/DEPrior_gini_g2p.txt"):
 			self.marge_all()
@@ -143,16 +124,15 @@ class ResourceManager(object):
 		g2p = pd.read_csv(f"{self.resource_folder}/gene2pubmed_human_count.txt", sep="\t", low_memory=False)
 		gini = pd.read_csv(f"{self.resource_folder}/rna_tissue_gtex_gini_norm.tsv", sep="\t")
 		DEPrior = pd.read_csv(f"{self.resource_folder}/DE_Prior.txt", sep="\t")
-		essentiality = pd.read_csv(f"{self.resource_folder}/tissueSpecific_mean.tsv", sep="\t")
 
 		DEPrior_g2p = pd.merge(g2p[["entrezgene_id","hgnc_symbol", "ensembl_gene_id","N"]], DEPrior[["Gene_Name", "Gene_EntrezID", "DE_Prior_Rank"]], 
 			  left_on="entrezgene_id", right_on="Gene_EntrezID", how="outer")
 
 		DEPrior_g2p = pd.merge(DEPrior_g2p, gini, 
 			  on=["entrezgene_id", "ensembl_gene_id", "hgnc_symbol"], how="outer")
-		
-		DEPrior_g2p = pd.merge(DEPrior_g2p, essentiality, 
-			  on=["hgnc_symbol"], how="outer")
+
+
+		DEPrior_g2p.dropna(inplace=True)
 
 		# QuantileTransformer on gene2pubmed (uniform distribution: 0 to 1)
 		# only gene in the gene in reference matrix
@@ -171,8 +151,7 @@ class ResourceManager(object):
 			columns = [
 				'hgnc_symbol', 'entrezgene_id', 'ensembl_gene_id',
 				'DE_Prior_Rank', 'N', 'g2p_rank',
-				'gini', 'gini_norm', 'gini_norm_rank',
-				'ess_percent'
+				'gini', 'gini_norm', 'gini_norm_rank'
 			]
 		)
 		

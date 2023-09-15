@@ -1,6 +1,6 @@
-# Clover-vis
+# Clover
 `Clover` tool to mining differentially expressed genes (DEGs) in intaractive visualization tool.
-This tool helps to summarise gene feature of your intrust.
+This tool rank DEGs by 4 different scores; Root, Dowsing, Ropeway, and Tresure hunt.
 
 ## Installation
 
@@ -21,16 +21,34 @@ Download the data with:
 python src/data_prep.py
 ```
 
+## Quick usase
+This tool can use as command line tool and web application.
 
-Run this app locally with:
+
+### Command line tool
+To run Clover as command line tool, run this command:
+```bash
+python clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
+
+```
+#### Essential options
+To run command line tool, you need to specify input file with `-i` option.
+This input file should be a csv file with FDR columns. For more options, please refer to this [page](docs/functions.md).
+##### -i, --input
+Input expression matrix file with FDR columns. Default delimiter of the file is `,` , but user can specify by the additional option `--sep`.
+
+##### --id_type
+gene name / ID type in input file to convert ID and merge the columns. Choose from `{hgnc_symbol, ensembl_gene_id, entrezgene_id}`. Default is `hgnc_symbol`.
+
+### Web tool
+
+For web application, this app implemented with [Dash](https://dash.plotly.com/).
+To Run this app locally with:
 ```bash
 python app.py
 ```
 
 Open a browser at http://127.0.0.1:8050
-
-## Quick usase
-
 
 
 
