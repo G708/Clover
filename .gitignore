@@ -1,6 +1,7 @@
 data/resources/*
 .DS_Store
 genes.tsv
+docs/case_study/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
