@@ -5,9 +5,9 @@
 
 ```bash
 usage: Clover.py [-h] [--input INPUT] [--id_type {hgnc_symbol,ensembl_gene_id,entrezgene_id}]
-						[--sep SEP] [--gene_column GENE_COLUMN]
-                        [--fdr_column FDR_COLUMN] [--resources RESOURCES]
-						[--thread THREAD] [--wc_top WC_TOP] [--output_path OUTPUT_PATH]
+				[--sep SEP] [--gene_column GENE_COLUMN]
+				[--fdr_column FDR_COLUMN] [--resources RESOURCES]
+				[--thread THREAD] [--wc_top WC_TOP] [--output_path OUTPUT_PATH]
 
 ```
 
