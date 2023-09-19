@@ -34,10 +34,10 @@ python clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
 #### Essential options
 To run command line tool, you need to specify input file with `-i` option.
 This input file should be a csv file with FDR columns. For more options, please refer to this [page](docs/functions.md).
-##### -i, --input
+##### `-i`, `--input`
 Input expression matrix file with FDR columns. Default delimiter of the file is `,` , but user can specify by the additional option `--sep`.
 
-##### --id_type
+##### `--id_type`
 gene name / ID type in input file to convert ID and merge the columns. Choose from `{hgnc_symbol, ensembl_gene_id, entrezgene_id}`. Default is `hgnc_symbol`.
 
 ### Web tool

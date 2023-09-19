@@ -4,11 +4,11 @@
 ## Command line usage
 
 ```bash
-usage: Clover.py [-h] [--input INPUT] [--sep SEP]
-                        [--gene_column GENE_COLUMN]
-                        [--id_type {hgnc_symbol,ensembl_gene_id,entrezgene_id}]
-                        [--fdr_column FDR_COLUMN] [--thread THREAD]
-                        [--wc_top WC_TOP] [--output_path OUTPUT_PATH]
+usage: Clover.py [-h] [--input INPUT] [--id_type {hgnc_symbol,ensembl_gene_id,entrezgene_id}]
+						[--sep SEP] [--gene_column GENE_COLUMN]
+                        [--fdr_column FDR_COLUMN] [--resources RESOURCES]
+						[--thread THREAD] [--wc_top WC_TOP] [--output_path OUTPUT_PATH]
+
 ```
 
 finding surprising DEG
@@ -39,6 +39,10 @@ Gene name/ID column name in the input file. If this is not specified, Clover wil
 
 FDR column name in input. If this is not specified, Clover will recognize the second column as the FDR.
 
+### `--resources` RESOURCES
+
+Whether to download resources or not. Default is `False`.
+
 ### `--thread` / `-t` THREAD
 
 Thread number to rum `gini_prepare.main()` parallel. Default is 1.
@@ -62,6 +66,7 @@ Components (files) in reference folder is as below:
 
 ```bash
 output_path
+├── DEPrior_gini_g2p.txt
 └── resources
 	├── DE_Prior.txt
 	├── gene2pubmed

@@ -52,7 +52,7 @@ class ResourceManager(object):
 			├── gene2pubmed_human_count.txt
 			├── rna_tissue_gtex_gini_norm.tsv
 			├── rna_tissue_gtex.tsv
-			└──  rna_tissue_gtex.tsv.zip
+			└── rna_tissue_gtex.tsv.zip
 
 	Attributes:
 		thread: A thread number to run gini_prepare.main() parallel.
