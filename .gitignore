@@ -3,6 +3,10 @@ data/DEPrior_gini_g2p.txt
 genes.tsv
 docs/case_study/*
 Zenodo
+app.py
+apps
+assets
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
