@@ -1,5 +1,4 @@
 # Clover
-<!-- FIXME: check ugase and add if needed -->
 
 ## Command line usage
 

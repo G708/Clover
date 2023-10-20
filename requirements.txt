@@ -11,3 +11,4 @@ wordcloud
 dash_cytoscape
 ranx
 biomart
+networkx
