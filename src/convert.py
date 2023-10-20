@@ -12,7 +12,7 @@ def get_ensembl_mappings():
 		to_entrezgene: Dictionary which keys are ensembl_gene_id or hgnc_symbol and value is entrezgene_id.
 		to_ensembl: Dictionary which keys are hgnc_symbol or entrezgene_id and value is ensembl_gene_id.
 	"""
-	# Set up connection to server. Change mirror site to your location.
+	# Set up a connection to the server. Change the mirror site to your location.
 	server = BiomartServer( "http://asia.ensembl.org/biomart" )
 	# server = BiomartServer( "http://www.ensembl.org/biomart" )
 	mart = server.datasets['hsapiens_gene_ensembl']
@@ -48,7 +48,7 @@ def add_ids(df, hgnc_symbol = "hgnc_symbol", ensembl_gene_id = "ensembl_gene_id"
 	"""Add hgnc_symbol, ensembl_gene_id, or entrezgene_id.
 
 	This will add hgnc_symbol, ensembl_gene_id, or entrezgene_id to df if there is no corresponding column.
-	Also, unify column name.
+	Also, unify column names.
 
 	Args:
 		df: pandas.DataFrame.
@@ -57,7 +57,7 @@ def add_ids(df, hgnc_symbol = "hgnc_symbol", ensembl_gene_id = "ensembl_gene_id"
 		entrezgene_id: corresponding column name to entrezgene_id (only number).
 	
 	Returns:
-		df_modify: pandas.DataFrame which added id and symbol, also, changes column name.
+		df_modify: pandas.DataFrame which added an id and symbol, also, changes column names.
 	"""
 	attributes = {
 		hgnc_symbol: "hgnc_symbol", 

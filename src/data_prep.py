@@ -33,15 +33,15 @@ logger = logging.getLogger(__name__)
 
 logging.basicConfig(level=logging.INFO,
 format="%(asctime)s - %(levelname)s:%(name)s - %(message)s",
-filename="test.log")
+filename="download.log")
 
 base_folder_default = "data"
 
 class ResourceManager(object):
-	"""Manage the download, caching, access, modification of resource files.
+	"""Manage the download, caching, access, and modification of resource files.
 
-	After Run ResourceManager.download_all(), reference folder will created.
-	Components (files) in reference folder is as below:
+	After Run ResourceManager.download_all(), the reference folder will created.
+	The components (files) in the reference folder are as below:
 
 		base_folder
 		├── DEPrior_gini_g2p.txt
@@ -119,7 +119,7 @@ class ResourceManager(object):
 		return 
 
 	def marge_all(self):
-		"""Loading resourses and merge to df.
+		"""Loading resources and merge to df.
 		"""
 		g2p = pd.read_csv(f"{self.resource_folder}/gene2pubmed_human_count.txt", sep="\t", low_memory=False)
 		gini = pd.read_csv(f"{self.resource_folder}/rna_tissue_gtex_gini_norm.tsv", sep="\t")
@@ -135,7 +135,7 @@ class ResourceManager(object):
 		DEPrior_g2p.dropna(inplace=True)
 
 		# QuantileTransformer on gene2pubmed (uniform distribution: 0 to 1)
-		# only gene in the gene in reference matrix
+		# Only gene in the gene in reference matrix
 		qt = QuantileTransformer()
 		X = np.array(DEPrior_g2p["N"].values).reshape(-1,1)
 		DEPrior_g2p["g2p_rank"] =qt.fit_transform(X)
@@ -144,7 +144,7 @@ class ResourceManager(object):
 		X = np.array(DEPrior_g2p["gini_norm"].values).reshape(-1,1)
 		DEPrior_g2p["gini_norm_rank"] =qt.fit_transform(X)
 
-		# set data type
+		# Set data type
 		# DEPrior_g2p = DEPrior_g2p.astype({'entrezgene_id': str})
 		DEPrior_g2p.to_csv(
 			f"{self.base_folder}/DEPrior_gini_g2p.txt", sep="\t",index=False,

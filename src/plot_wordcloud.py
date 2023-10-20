@@ -9,10 +9,10 @@ from sklearn import preprocessing
 
 def asc4rank(score):
     """
-    Return True if the score is ascending order for ranking.
+    Return True if the score is in ascending order for ranking.
     This rank will reflect the word size in the word cloud.
-    So, FDR and Clover will be False, Smaller the value, larger the word size,
-    and the others will be True, larger the value, larger the word size.
+    So, FDR and Glint will be False, the smaller the value, the larger the word size.
+    and the others will be True, the larger the value, the larger the word size.
 
     Parameters
     ----------
@@ -22,10 +22,10 @@ def asc4rank(score):
     Returns
     -------
     bool
-        True if the score is ascending order for ranking.
+        True if the score is in ascending order for ranking.
 
     """
-    asc = ['FDR', 'Clover']
+    asc = ['FDR', 'Glint']
     if score in asc:
         return False
     else:

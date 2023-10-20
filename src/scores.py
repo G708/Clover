@@ -1,14 +1,14 @@
 import numpy as np
 
-def clover(de_prior, gini):
+def glint(de_prior, gini):
     """
-    By this score, user can rank the genes which is:
-    - Genes which is Low probability to be DEG
-    - Reraness (tissue selective expression)
+    By this score, the user can rank the genes which is:
+    - Genes with is Low probability of being DEG
+    - Reraness (tissue-specific expression)
 
-    Lower score -> Rera to be DEG and Tissue selective expression gene
+    Lower score -> Rera to be DEG and tissue-specific expressed gene
     = 0.2 x np.log1p(1/0.9) = 0.0649
-    Biger score -> used to be DEG and House keeping gene
+    Larger score -> used to be DEG and Housekeeping gene
     = 0.9 x np.log1p(1/0.2) = 0.7003
     """
     prob = de_prior # close to 1: More DEG
@@ -17,7 +17,7 @@ def clover(de_prior, gini):
     
 
 def dowsing(de_prior, gini, fdr):
-    rare_deg = clover(de_prior, gini)
+    rare_deg = glint(de_prior, gini)
     rareness = np.log2(2/(rare_deg+1))
     return rareness * -np.log10(fdr)
 

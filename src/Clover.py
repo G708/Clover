@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from data_prep import ResourceManager
-from scores import clover, dowsing, treasure_hunt, ropeway
+from scores import glint, dowsing, treasure_hunt, ropeway
 from plot_wordcloud import plot_wordcloud
 
 import logging
@@ -51,7 +51,7 @@ def input_args():
 	parser.add_argument("--output_path","-o",
 						type=str,
 						default=None,
-						help="A output_directory of downloaded reference files and output. Default is '~/Clover'.")	
+						help="An output_directory of downloaded reference files and output. Default is '~/Clover'.")	
 	return parser.parse_args()
 
 class Rank:
@@ -60,10 +60,10 @@ class Rank:
 	Return scores to rank surprising DEGs.
 
 	Attributes:
-		df: A expression matrix or DEG lists.
-		gene_column: A column name of gene name or ID. Default is first column of df.
+		df: An expression matrix or DEG lists.
+		gene_column: A column name of gene name or ID. The default is the first column of df.
 		id_type: Choose from ["hgnc_symbol", "ensembl_gene_id", "entrezgene_id"].
-		fdr_column: A column name of fdr. Default is second column of df.
+		fdr_column: A column name of FDR. The default is the second column of df.
 	"""
 
 	def __init__(self, df, base_folder, gene_column: str = None, id_type: str = None, fdr_column: str = None):
@@ -71,11 +71,11 @@ class Rank:
 		self.id_type = id_type
 		self.base_folder = base_folder
 
-		# get resoueses to culculate ranking
+		# get resources to calculate ranking
 		try:
-			self.resourses = self._get_resourses()
+			self.resources = self._get_resources()
 		except Exception as e:
-			logger.error(f"resoueses ERROR: {e}")
+			logger.error(f"resources ERROR: {e}")
 
 		id_choise = ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id']
 		if not (id_type in id_choise):
@@ -106,34 +106,34 @@ class Rank:
 				self.fdr_column = "FDR"
 		return
 
-	def _get_resourses(self):
-		"""Loading resourses and merge to df.
+	def _get_resources(self):
+		"""Loading resources and merge to df.
 		"""
 		resources_path = f"{self.base_folder}/resources"
-		DEPrior_g2p = pd.read_csv(f"{resources_path}/DEPrior_gini_g2p.txt", sep="\t")		
+		DEPrior_g2p = pd.read_csv(f"{self.base_folder}/DEPrior_gini_g2p.txt", sep="\t")		
 		return DEPrior_g2p
 		
 	def run(self):
-		"""Merge resourse score and culculate ranking scores.
+		"""Merge resource score and calculate ranking scores.
 		
 		Returns:
-			df_merge: pandas.DataFrame which add ranking column to input df.
+			df_merge: pandas.DataFrame which adds ranking columns to input df.
 		"""
 
-		df_merge = pd.merge(self.df, self.resourses[["hgnc_symbol", "ensembl_gene_id", "entrezgene_id", "DE_Prior_Rank", "g2p_rank", "N", "gini_norm"]], 
+		df_merge = pd.merge(self.df, self.resources[["hgnc_symbol", "ensembl_gene_id", "entrezgene_id", "DE_Prior_Rank", "g2p_rank", "N", "gini_norm"]], 
 			  left_on=self.gene_column, right_on=self.id_type, how="left")
 		
 		# Replace FDR 0 to second smallest value * 0.001
-		# To avoid divide by zero error
+		# To avoid dividing by zero error
 		unique_fdr = np.sort(df_merge["FDR"].unique())
 		if 0 in unique_fdr:
 			df_merge.loc[df_merge["FDR"] == 0, "FDR"] =	np.sort(df_merge["FDR"].unique())[1] * 0.001
 		else:
 			pass
 		
-		# culculate ranking scores
+		# Calculate ranking scores
 
-		df_merge["Clover"] = clover(df_merge["DE_Prior_Rank"], df_merge["gini_norm"])
+		df_merge["Glint"] = glint(df_merge["DE_Prior_Rank"], df_merge["gini_norm"])
 		df_merge["Dowsing"] = dowsing(df_merge["DE_Prior_Rank"], df_merge["gini_norm"], df_merge[self.fdr_column] )
 		df_merge["Treasure_Hunt"] = treasure_hunt(df_merge["g2p_rank"], df_merge["Dowsing"])
 		df_merge["Ropeway"] = ropeway(df_merge["g2p_rank"], df_merge["Dowsing"])
@@ -142,7 +142,7 @@ class Rank:
 	
 
 def asc_set(score):
-	asc = ['FDR', 'Clover']
+	asc = ['FDR', 'Glint']
 	if score in asc:
 		return True
 	else:
@@ -153,7 +153,7 @@ def main(args):
 		resource = ResourceManager(thread = args.thread, base_folder = args.output_path)
 		resource.download_all()
 	else:
-		# find resource folder
+		# Find resource folder
 		# if not exist, return error message
 		resource = ResourceManager(thread = args.thread, base_folder = args.output_path)
 		if not os.path.exists(f"{resource.base_folder}/DEPrior_gini_g2p.txt"):
@@ -168,7 +168,7 @@ def main(args):
 	result = rank_get.run()
 	result.to_csv(f"{resource.base_folder}/rank_result.csv")
 	os.makedirs(f"{resource.base_folder}/wordcloud", exist_ok=True)
-	for score in ["FDR","Clover", "Dowsing", "Treasure_Hunt", "Ropeway"]:
+	for score in ["FDR", "Glint", "Dowsing", "Treasure_Hunt", "Ropeway"]:
 		sorted_result = result.sort_values(by=score, ascending=asc_set(score))
 		plot_wordcloud(sorted_result[0:args.wc_top], score, f"{resource.base_folder}/wordcloud")
 	return result

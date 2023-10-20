@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Get Gini index on genes as matrix
-# Sorse RNA-seq data is from GTEx data in Human protein Atlas
+# Get the Gini index on genes as a matrix
+# Sorse RNA-seq data is from GTEx data in Human Protein Atlas
 # https://www.proteinatlas.org/about/download
 
 # output matrix has 19764 gene
@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 from convert import add_ids
 
 def gini_fast(array):
-	"""Calculate the Gini index
+	""" Calculate the Gini index
 
 	Args:
 		array: A numpy array of expression values.
 
 	Returns:
-		gini: gini index of one gene
+		gini: Gini index of one gene
 	"""
 	# https://github.com/oliviaguest/gini
 	# based on bottom eq:
@@ -50,10 +50,10 @@ def gini_fast(array):
 	return gini
 
 class GetGini(object):
-	"""Calculate Gini index
+	""" Calculate Gini index
 
 	Args: 
-		file: GTEx RNA-seq file name. A column names in matrix is as below:
+		file: GTEx RNA-seq file name. A column name in the matrix is as below:
 				column0: Gene
 				column1: Gene name
 				column2: Tissue
@@ -70,13 +70,13 @@ class GetGini(object):
 		self.name_column = "Gene name"
 
 	def read_file(self):
-		"""Read GTEx RNA-seq expression from HPA
+		""" Read GTEx RNA-seq expression from HPA
 		
 		Returns:
-			pandas.DataFrame of readed file.
+			pandas.DataFrame of read file.
 		
 		Raises:
-			FileNotFoundError: An error occurred when input file is not exist.
+			FileNotFoundError: An error occurs when the input file does not exist.
 
 		"""
 		try:
@@ -90,32 +90,32 @@ class GetGini(object):
 			logger.info(f"FileNotFoundError: {e}")
 
 	def genes(self):
-		"""Extruct uniwue gene in matrix
-		A gene must be qantitated over one tissue in dataset.
+		""" Extruct unique gene in matrix
+		A gene must be quantitated over one tissue in the dataset.
 
 		Returns:
-			uniq_gene: list of unique gene in matrix which thos more than one tissue data.
+			uniq_gene: list of the unique genes in the matrix which has more than one tissue data.
 		"""
 		logger.info(f"start gini")
 
-		# remove genes which only has one tissue data in matrix.
+		# remove genes which only have one tissue data in a matrix.
 		gene_group_size = self.expression_matrix.groupby(['Gene']).size()
 		gene_group = gene_group_size[gene_group_size > 1]
 
-		# gene lists which will be return gini
+		# gene lists which will be returning Gini index
 		uniq_gene = gene_group.index.get_level_values('Gene').unique()
 		logger.info(f"Number of genes: {len(uniq_gene)}")
 		return uniq_gene
 
-	def culculate_gini(self, gene: str):
-		"""Culculate gini by gene
+	def calculate_gini(self, gene: str):
+		""" Calculate gini by gene
 
 		Args: 
 			gene -> str : Name of the gene.
 
 		Returns:
-			gini: Gini. Max is 1 - 1/N. (N is tissue size)
-			g_norm: Normalized gini. Normalize by (N/(N-1)). Max is 1.
+			gini: Gini index. Max is 1 - 1/N. (N is tissue size)
+			g_norm: Normalized Gini index. Normalize by (N/(N-1)). Max is 1.
 			expression_mean: Expression mean amoung tissue.
 
 		"""
@@ -138,7 +138,7 @@ def main(input_file, thread):
 		thread = 1
 	
 	with Pool(thread) as p:
-		result = p.map(functools.partial(get_Gini.culculate_gini),uniq_gene)
+		result = p.map(functools.partial(get_Gini.calculate_gini),uniq_gene)
 	gene_name = [i[0] for i in result]
 	gini = [i[1] for i in result]
 	gini_norm = [i[2] for i in result]
