@@ -4,7 +4,7 @@
 Please see [ChangeLog.md](ChangeLog.md)
 
 ## 1. Overview
-`Clover` is a tool to mining differentially expressed genes (DEGs) in intaractive visualization tool.
+`Clover` is a tool for prioritising rare genes in a diff erentially expressed gene (DEG) list.
 
 ## 2. Installation
 
@@ -49,15 +49,11 @@ Input expression matrix file with FDR columns. Default delimiter of the file is 
 ##### `--id_type`
 gene name / ID type in input file to convert ID and merge the columns. Choose from `{hgnc_symbol, ensembl_gene_id, entrezgene_id}`. Default is `hgnc_symbol`.
 
-### 3.2. Web tool
+### 3.2. Interactive Dash tool
 
-For web application, this app implemented with [Dash](https://dash.plotly.com/).
-To Run this app locally with:
-```bash
-python app.py
-```
+For interactive dashboard application, we implemented clover using [Dash](https://dash.plotly.com/).
 
-Open a browser at http://127.0.0.1:8050
+Please check the [repository name](.) repository for more details.
 
 
 ## 4. Feature Data sources
