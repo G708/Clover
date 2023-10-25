@@ -155,7 +155,7 @@ class ResourceManager(object):
 			]
 		)
 		
-		return DEPrior_g2p		
+		return DEPrior_g2p
 
 	def _get_resource_folder(self):
 		resource_dir = os.path.join(self.base_folder, 'resources')
