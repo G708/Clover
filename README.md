@@ -31,7 +31,7 @@ python src/data_prep.py
 ```
 
 ## 3. Quick usase
-This tool can use as command line tool and web application.
+This tool can use as command line tool and interactive dashboard application.
 
 
 ### 3.1 Command line tool
