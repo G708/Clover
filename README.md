@@ -74,9 +74,10 @@ python src/data_prep.py
 * Human cell line essentiality data is downloaded from OGEE (https://v3.ogee.info/#/home)
   > S. Gurumayum *, P. Jiang *, X. Hao, T.L Campos, N.D. Young, P.K. Korhonen, R.B. Gasser, P. Bork, X.M. Zhao, L.J. He, Chen, W.-H. (2020). "OGEE v3: Online GEne Essentiality database with increased coverage of organisms and human cell lines. Nucleic Acids Research, gkaa884, [doi: 10.1093/nar/gkaa884 ](https://doi.org/10.1093/nar/gkaa884)
 
-## 5. Reference
+## 5. Citation
 
-* Preprint
+> Oba, G. M., & Nakato, R. (2023). Clover: An unbiased method for prioritizing differentially expressed genes using a data-driven approach. GitHub. URL: https://github.com/G708/Clover
+
 
 ## 6. License
 This project is licensed under the terms of the MIT license.
