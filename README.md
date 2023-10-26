@@ -4,7 +4,7 @@
 Please see [ChangeLog.md](ChangeLog.md)
 
 ## 1. Overview
-`Clover` is a tool for prioritising rare genes in a diff erentially expressed gene (DEG) list.
+`Clover` is a tool for prioritising rare genes in a differentially expressed gene (DEG) list.
 
 ## 2. Installation
 
@@ -37,7 +37,7 @@ This tool can use as command line tool and web application.
 ### 3.1 Command line tool
 To run Clover as command line tool, run this command:
 ```bash
-python clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
+python Clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
 
 ```
 #### 3.1.1 Essential options
@@ -53,7 +53,7 @@ gene name / ID type in input file to convert ID and merge the columns. Choose fr
 
 For interactive dashboard application, we implemented clover using [Dash](https://dash.plotly.com/).
 
-Please check the [repository name](.) repository for more details.
+Please check the [https://github.com/G708/clover-dash](https://github.com/G708/clover-dash) repository for more details.
 
 
 ## 4. Feature Data sources

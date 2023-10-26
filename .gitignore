@@ -6,6 +6,8 @@ Zenodo
 app.py
 apps
 assets
+unpublish_datas
+.gitignore
 
 
 # Byte-compiled / optimized / DLL files
