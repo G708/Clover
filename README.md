@@ -13,14 +13,13 @@ Please see [ChangeLog.md](ChangeLog.md)
 Other requirements are listed in [requirements.txt](requirements.txt).
 
 
-To run this app locally, clone this repository and open this app folder in your terminal/Command Prompt.
+To run `Clover`, clone this repository and move to the repository in your terminal / Command Prompt.
 ```bash
 git clone https://github.com/G708/Clover.git
 cd Clover
 ```
 
-The project relies on several Python packages including Dash, Dash Bootstrap Components, Plotly, and Pandas.
-You can install these dependencies like this:
+The project relies on several Python packages. You can install these dependencies like this:
 ```bash
 pip install -r requirements.txt
 ```
@@ -36,13 +35,15 @@ This tool can use as command line tool and interactive dashboard application.
 
 ### 3.1 Command line tool
 To run Clover as command line tool, run this command:
+
 ```bash
 python Clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
-
 ```
+
 #### 3.1.1 Essential options
 To run command line tool, you need to specify input file with `-i` option.
-This input file should be a csv file with FDR columns. For full options, please refer to this [page](docs/functions.md).
+This input file should be a csv file with FDR columns. For full options, please refer to [ function page](docs/functions.md).
+
 ##### `-i`, `--input`
 Input expression matrix file with FDR columns. Default delimiter of the file is `,` , but user can specify by the additional option `--sep`.
 
@@ -62,6 +63,8 @@ Download the data with:
 ```bash
 python src/data_prep.py
 ```
+
+### Data sources information
 
 * RNA-seq data from Genotype-Tissue Expression GTEx project v8 (THE GTEX CONSORTIUM, 2020) data in Human protein Atlas ([https://www.proteinatlas.org/download/rna_tissue_gtex.tsv.zip](https://www.proteinatlas.org/download/rna_tissue_gtex.tsv.zip)).
 * Publication data for each gene is publicly available at [https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2pubmed.gz](https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2pubmed.gz).
