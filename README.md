@@ -37,8 +37,23 @@ This tool can use as command line tool and interactive dashboard application.
 To run Clover as command line tool, run this command:
 
 ```bash
-python Clover.py -i imput_DEG_list.csv --id_type hgnc_symbol
+python src/Clover.py -i test_imput_DEG.csv --id_type hgnc_symbol -o test_output
 ```
+
+#### Output
+The output files are as below:
+  
+  ```bash
+  Clover
+  └──test_output
+    ├──  rank_result.csv
+    └── wordcloud
+      ├── FDR.png
+      ├── Glint.png
+      ├── Dowsing.png
+      ├── Treasure_Hunt.png
+      └── Ropeway.png
+  ```
 
 #### 3.1.1 Essential options
 To run command line tool, you need to specify input file with `-i` option.
