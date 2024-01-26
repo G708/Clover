@@ -35,7 +35,8 @@ logging.basicConfig(level=logging.INFO,
 format="%(asctime)s - %(levelname)s:%(name)s - %(message)s",
 filename="download.log")
 
-base_folder_default = "data"
+work_directory = os.getcwd()
+base_folder_default = f"{work_directory}/data"
 
 class ResourceManager(object):
 	"""Manage the download, caching, access, and modification of resource files.
@@ -43,7 +44,8 @@ class ResourceManager(object):
 	After Run ResourceManager.download_all(), the reference folder will created.
 	The components (files) in the reference folder are as below:
 
-		base_folder
+	current_directory
+	└── data
 		├── DEPrior_gini_g2p.txt
 		└── resource
 			├── DE_Prior.txt
@@ -56,12 +58,10 @@ class ResourceManager(object):
 
 	Attributes:
 		thread: A thread number to run gini_prepare.main() parallel.
-		base_folder: A base_folder name of downloaded reference files.
 	"""
-	def __init__(self, thread, base_folder=None):
+	def __init__(self, thread):
 
-		self.base_folder = base_folder if base_folder else \
-			os.path.join(os.path.expanduser('~'), base_folder_default)
+		self.base_folder = base_folder_default
 		self.resource_folder = self._get_resource_folder()
 		logger.info('Using %s as resource folder.' % self.resource_folder)
 		self.thread = thread
@@ -198,15 +198,11 @@ def download_zip(url, fname):
 
 if __name__ == '__main__':
 	# Download all the resources if this script is run directly
-	parser = argparse.ArgumentParser(description='Download resources')
+	parser = argparse.ArgumentParser(description='Download resources. Data will located in data folder in current directory.')
 	parser.add_argument("--thread", "-t",
                     type=int,
                     default=1,
                     help="thread number to rum gini_prepare.main() parallel")
-	parser.add_argument("--output_path","-o",
-                    type=str,
-                    default=None,
-                    help="A output_directory of downloaded reference files and output. Default is '~/Clover'.")
 	args = parser.parse_args()
 	
-	ResourceManager(args.thread, args.output_path).download_all()
+	ResourceManager(args.thread).download_all()
