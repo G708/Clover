@@ -29,7 +29,7 @@ Download the data with:
 python src/data_prep.py
 ```
 
-## 3. Quick usase
+## 3. Quick usage
 This tool can use as command line tool and interactive dashboard application.
 
 
