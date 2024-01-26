@@ -5,8 +5,8 @@
 ```bash
 usage: Clover.py [-h] [--input INPUT] [--id_type {hgnc_symbol,ensembl_gene_id,entrezgene_id}]
 				[--sep SEP] [--gene_column GENE_COLUMN]
-				[--fdr_column FDR_COLUMN] [--resources RESOURCES]
-				[--thread THREAD] [--wc_top WC_TOP] [--output_path OUTPUT_PATH]
+				[--fdr_column FDR_COLUMN] [--wc_top WC_TOP]
+				[--output_path OUTPUT_PATH]
 
 ```
 
@@ -38,21 +38,13 @@ Gene name/ID column name in the input file. If this is not specified, Clover wil
 
 FDR column name in input. If this is not specified, Clover will recognize the second column as the FDR.
 
-### `--resources` RESOURCES
-
-Whether to download resources or not. Default is `False`.
-
-### `--thread` / `-t` THREAD
-
-Thread number to rum `gini_prepare.main()` parallel. Default is 1.
-
 ### `--wc_top` / `-w` WC_TOP
 
 Rank top N gene to plot word cloud. Default is 30.
 
 ### `--output_path` / `-o` OUTPUT_PATH
 
-A output_directory of downloaded reference files and output. Default is `~/Clover`.
+A output_directory of downloaded reference files and output. Default is current directory.
 
 # Clover_resources
 
@@ -64,16 +56,17 @@ After runing `ResourceManager.download_all()`, reference folder will created.
 Components (files) in reference folder is as below:
 
 ```bash
-output_path
-├── DEPrior_gini_g2p.txt
-└── resources
-	├── DE_Prior.txt
-	├── gene2pubmed
-	├── gene2pubmed.gz
-	├── gene2pubmed_human_count.txt
-	├── rna_tissue_gtex_gini_norm.tsv
-	├── rna_tissue_gtex.tsv
-	└── rna_tissue_gtex.tsv.zip
+current_directory
+└── data
+	├── DEPrior_gini_g2p.txt
+	└── resources
+		├── DE_Prior.txt
+		├── gene2pubmed
+		├── gene2pubmed.gz
+		├── gene2pubmed_human_count.txt
+		├── rna_tissue_gtex_gini_norm.tsv
+		├── rna_tissue_gtex.tsv
+		└── rna_tissue_gtex.tsv.zip
 ```
 
 ### Attributes:
