@@ -35,10 +35,6 @@ def input_args():
 						type=str,
 						default=None,
 						help="FDR column name in input")
-	parser.add_argument("--thread", "-t",
-						type=int,
-						default=1,
-						help="thread number to rum gini_prepare.main() parallel")
 	parser.add_argument("--wc_top", "-w",
 						type=int,
 						default=30,
@@ -76,12 +72,6 @@ class Rank:
 				raise ValueError(f"Output directory already exists: {self.output_path}")
 			else:
 				os.makedirs(self.output_path, exist_ok=False)
-
-		# get resources to calculate ranking
-		try:
-			self.resources = self._get_resources()
-		except Exception as e:
-			logger.error(f"resources ERROR: {e}")
 
 		id_choice = ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id']
 		if not (id_type in id_choice):
@@ -128,8 +118,13 @@ class Rank:
 		Returns:
 			df_merge: pandas.DataFrame which adds ranking columns to input df.
 		"""
+		# get resources to calculate ranking
+		try:
+			resources = self._get_resources()
+		except Exception as e:
+			raise ValueError(f"resources ERROR: {e}")
 
-		df_merge = pd.merge(self.df, self.resources[["hgnc_symbol", "ensembl_gene_id", "entrezgene_id", "DE_Prior_Rank", "g2p_rank", "N", "gini_norm"]], 
+		df_merge = pd.merge(self.df, resources[["hgnc_symbol", "ensembl_gene_id", "entrezgene_id", "DE_Prior_Rank", "g2p_rank", "N", "gini_norm"]], 
 			  left_on=self.gene_column, right_on=self.id_type, how="left")
 		
 		# Replace FDR 0 to second smallest value * 0.001

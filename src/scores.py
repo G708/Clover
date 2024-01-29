@@ -7,9 +7,9 @@ def glint(de_prior, gini):
     - Reraness (tissue-specific expression)
 
     Lower score -> Rera to be DEG and tissue-specific expressed gene
-    = 0.2 x np.log1p(1/0.9) = 0.0649
+    = 0.2 x np.log2(1/0.9) = 0.0649
     Larger score -> used to be DEG and Housekeeping gene
-    = 0.9 x np.log1p(1/0.2) = 0.7003
+    = 0.9 x np.log2(1/0.2) = 0.7003
     """
     prob = de_prior # close to 1: More DEG
     ts = np.log2(2/(gini +1)) # 1: More housekeeping, 0: More TS
