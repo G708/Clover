@@ -88,8 +88,7 @@ python src/data_prep.py
 
 ## 5. Citation
 
-> Oba, G. M., & Nakato, R. (2023). Clover: An unbiased method for prioritizing differentially expressed genes using a data-driven approach. GitHub. URL: https://github.com/G708/Clover
-
+> Oba GM, Nakato R. Clover: An unbiased method for prioritizing differentially expressed genes using a data-driven approach. Genes Cells. 2024 Apr 11. doi: 10.1111/gtc.13119. Epub ahead of print. PMID: 38602264.
 
 ## 6. License
 This project is licensed under the terms of the MIT license.
